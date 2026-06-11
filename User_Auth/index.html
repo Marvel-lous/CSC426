@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login Authentication System</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+/* Container */
+.box{
+    background:white;
+    padding:25px;
+    width:320px;
+    border-radius:12px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* Title */
+h2{
+    text-align:center;
+    margin-bottom:15px;
+    color:#333;
+}
+
+/* Inputs */
+input{
+    width:100%;
+    padding:10px;
+    margin:8px 0;
+    border:1px solid #ccc;
+    border-radius:6px;
+    outline:none;
+}
+
+/* Buttons */
+.buttons{
+    display:flex;
+    justify-content:space-between;
+}
+
+button{
+    width:48%;
+    padding:10px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.login-btn{
+    background:#28a745;
+    color:white;
+}
+
+.reset-btn{
+    background:#dc3545;
+    color:white;
+}
+
+/* Message */
+#message{
+    text-align:center;
+    margin-bottom:10px;
+    font-size:14px;
+}
+
+/* Success/Error styles */
+.success{
+    color:green;
+}
+
+.error{
+    color:red;
+}
+
+/* Responsive */
+@media(max-width:400px){
+    .box{
+        width:90%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+    <h2>Login System</h2>
+
+    <div id="message"></div>
+
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+
+    <div class="buttons">
+        <button class="login-btn" onclick="login()">Login</button>
+        <button class="reset-btn" onclick="resetForm()">Reset</button>
+    </div>
+
+</div>
+
+<script>
+// Predefined demo credentials
+const validUser = "admin";
+const validPass = "12345";
+
+function login(){
+    let username = document.getElementById("username").value.trim();
+    let password = document.getElementById("password").value.trim();
+    let message = document.getElementById("message");
+
+    // Validation checks
+    if(username === "" || password === ""){
+        message.className = "error";
+        message.innerText = "All fields are required!";
+        return;
+    }
+
+    if(password.length < 4){
+        message.className = "error";
+        message.innerText = "Password must be at least 4 characters!";
+        return;
+    }
+
+    // Authentication check
+    if(username === validUser && password === validPass){
+        message.className = "success";
+        message.innerText = "Login successful! Welcome " + username + " 🎉";
+    } else {
+        message.className = "error";
+        message.innerText = "Invalid username or password!";
+    }
+}
+
+function resetForm(){
+    document.getElementById("username").value = "";
+    document.getElementById("password").value = "";
+    document.getElementById("message").innerText = "";
+}
+</script>
+
+</body>
+</html>
