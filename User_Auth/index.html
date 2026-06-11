@@ -3,150 +3,290 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login Authentication System</title>
+<title>Login | CSC426</title>
 
 <style>
-body{
-    margin:0;
-    font-family:Arial, sans-serif;
-    background: linear-gradient(135deg, #4facfe, #00f2fe);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', system-ui, sans-serif;
 }
 
-/* Container */
-.box{
-    background:white;
-    padding:25px;
-    width:320px;
-    border-radius:12px;
-    box-shadow:0 8px 20px rgba(0,0,0,0.2);
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #a8e063, #56ab2f);
 }
 
-/* Title */
-h2{
-    text-align:center;
-    margin-bottom:15px;
-    color:#333;
+/* MAIN CARD */
+.card {
+  width: 100%;
+  max-width: 420px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 40px 35px;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+  position: relative;
+  overflow: hidden;
 }
 
-/* Inputs */
-input{
-    width:100%;
-    padding:10px;
-    margin:8px 0;
-    border:1px solid #ccc;
-    border-radius:6px;
-    outline:none;
+/* TOP DECORATION */
+.card::before {
+  content: "";
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 140px;
+  height: 140px;
+  background: linear-gradient(135deg, #56ab2f, #a8e063);
+  border-radius: 50%;
+  opacity: 0.3;
 }
 
-/* Buttons */
-.buttons{
-    display:flex;
-    justify-content:space-between;
+/* HEADER */
+.label {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #4b5563;
+  margin-bottom: 10px;
 }
 
-button{
-    width:48%;
-    padding:10px;
-    border:none;
-    border-radius:6px;
-    cursor:pointer;
-    font-weight:bold;
+h1 {
+  font-size: 28px;
+  color: #1f2937;
+  margin-bottom: 6px;
 }
 
-.login-btn{
-    background:#28a745;
-    color:white;
+.subtitle {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 30px;
 }
 
-.reset-btn{
-    background:#dc3545;
-    color:white;
+/* INPUTS */
+.group {
+  margin-bottom: 18px;
 }
 
-/* Message */
-#message{
-    text-align:center;
-    margin-bottom:10px;
-    font-size:14px;
+label {
+  display: block;
+  font-size: 11px;
+  color: #6b7280;
+  margin-bottom: 6px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
-/* Success/Error styles */
-.success{
-    color:green;
+input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  outline: none;
+  transition: 0.2s;
+  font-size: 14px;
 }
 
-.error{
-    color:red;
+input:focus {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34,197,94,0.15);
 }
 
-/* Responsive */
-@media(max-width:400px){
-    .box{
-        width:90%;
-    }
+/* PASSWORD TOGGLE */
+.toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #6b7280;
+}
+
+/* INPUT WRAPPER */
+.wrapper {
+  position: relative;
+}
+
+/* ERROR */
+.error {
+  font-size: 12px;
+  color: #dc2626;
+  margin-top: 5px;
+  display: none;
+}
+
+.error.show {
+  display: block;
+}
+
+/* BUTTONS */
+.buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+button {
+  flex: 1;
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.login {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+}
+
+.login:hover {
+  transform: translateY(-1px);
+}
+
+.reset {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.reset:hover {
+  background: #e5e7eb;
+}
+
+/* SUCCESS SCREEN */
+.success {
+  display: none;
+  text-align: center;
+}
+
+.icon {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 30px;
+  box-shadow: 0 10px 25px rgba(34,197,94,0.3);
+}
+
+.success h2 {
+  color: #16a34a;
+  margin-bottom: 10px;
+}
+
+.success p {
+  color: #6b7280;
+}
+
+.logout {
+  margin-top: 20px;
+  background: #f3f4f6;
+  color: #374151;
+}
+
+/* RESPONSIVE */
+@media (max-width: 420px) {
+  .card {
+    padding: 30px 20px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div class="box">
+<div class="card">
 
-    <h2>Login System</h2>
+  <!-- LOGIN -->
+  <div id="loginBox">
+    <div class="label">CSC426 AUTH SYSTEM</div>
+    <h1>Welcome Back</h1>
 
-    <div id="message"></div>
+    <div class="group">
+      <label>Username</label>
+      <input id="username" type="text" placeholder="Enter username">
+      <div class="error" id="userErr">Username must be at least 3 characters</div>
+    </div>
 
-    <input type="text" id="username" placeholder="Username">
-    <input type="password" id="password" placeholder="Password">
+    <div class="group">
+      <label>Password</label>
+      <div class="wrapper">
+        <input id="password" type="password" placeholder="Enter password">
+        <span class="toggle" onclick="togglePw()">👁</span>
+      </div>
+      <div class="error" id="passErr">Password must be at least 6 characters</div>
+    </div>
 
     <div class="buttons">
-        <button class="login-btn" onclick="login()">Login</button>
-        <button class="reset-btn" onclick="resetForm()">Reset</button>
+      <button class="login" onclick="login()">Login</button>
+      <button class="reset" onclick="resetForm()">Reset</button>
     </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="success" id="successBox">
+    <div class="icon">✓</div>
+    <h2>Login Successful</h2>
+    <p>Welcome, <span id="userShow"></span></p>
+    <button class="logout" onclick="logout()">Logout</button>
+  </div>
 
 </div>
 
 <script>
-// Predefined demo credentials
-const validUser = "admin";
-const validPass = "12345";
-
-function login(){
-    let username = document.getElementById("username").value.trim();
-    let password = document.getElementById("password").value.trim();
-    let message = document.getElementById("message");
-
-    // Validation checks
-    if(username === "" || password === ""){
-        message.className = "error";
-        message.innerText = "All fields are required!";
-        return;
-    }
-
-    if(password.length < 4){
-        message.className = "error";
-        message.innerText = "Password must be at least 4 characters!";
-        return;
-    }
-
-    // Authentication check
-    if(username === validUser && password === validPass){
-        message.className = "success";
-        message.innerText = "Login successful! Welcome " + username + " 🎉";
-    } else {
-        message.className = "error";
-        message.innerText = "Invalid username or password!";
-    }
+function togglePw() {
+  const pw = document.getElementById("password");
+  pw.type = pw.type === "password" ? "text" : "password";
 }
 
-function resetForm(){
-    document.getElementById("username").value = "";
-    document.getElementById("password").value = "";
-    document.getElementById("message").innerText = "";
+function login() {
+  const u = document.getElementById("username").value.trim();
+  const p = document.getElementById("password").value;
+
+  let ok = true;
+
+  if (u.length < 3) {
+    document.getElementById("userErr").classList.add("show");
+    ok = false;
+  } else {
+    document.getElementById("userErr").classList.remove("show");
+  }
+
+  if (p.length < 6) {
+    document.getElementById("passErr").classList.add("show");
+    ok = false;
+  } else {
+    document.getElementById("passErr").classList.remove("show");
+  }
+
+  if (ok) {
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("successBox").style.display = "block";
+    document.getElementById("userShow").textContent = u;
+  }
+}
+
+function resetForm() {
+  document.getElementById("username").value = "";
+  document.getElementById("password").value = "";
+  document.getElementById("userErr").classList.remove("show");
+  document.getElementById("passErr").classList.remove("show");
+}
+
+function logout() {
+  resetForm();
+  document.getElementById("successBox").style.display = "none";
+  document.getElementById("loginBox").style.display = "block";
 }
 </script>
 
