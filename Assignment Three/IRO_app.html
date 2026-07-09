@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IRO — Issues Reporting Outlet</title>
+<style>
+  :root{
+    --ink:#152521;
+    --paper:#f2ede3;
+    --panel:#ffffff;
+    --teal:#0f6b5c;
+    --teal-dark:#0a463c;
+    --gold:#c98a2c;
+    --red:#a5402d;
+    --line:#d9d2c2;
+    --muted:#6b6459;
+    --radius:10px;
+    font-size:16px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Segoe UI',Arial,sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.5;
+  }
+  header{
+    background:var(--teal-dark);
+    color:#f2ede3;
+    padding:22px 28px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:10px;
+    border-bottom:5px solid var(--gold);
+  }
+  header .brand{
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  header .mark{
+    width:44px;height:44px;border-radius:50%;
+    background:var(--gold);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;color:var(--teal-dark);font-size:18px;
+  }
+  header h1{margin:0;font-size:1.35rem;letter-spacing:.3px;}
+  header p{margin:2px 0 0;font-size:.82rem;color:#cfe3dd;}
+  nav{display:flex;gap:8px;}
+  nav button{
+    background:transparent;
+    border:1px solid #3f7f72;
+    color:#eef6f3;
+    padding:8px 16px;
+    border-radius:999px;
+    cursor:pointer;
+    font-size:.85rem;
+  }
+  nav button.active{background:var(--gold);border-color:var(--gold);color:#3a2705;font-weight:700;}
+
+  main{max-width:1080px;margin:0 auto;padding:28px 20px 60px;}
+  .view{display:none;}
+  .view.active{display:block;}
+
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:22px;
+    margin-bottom:20px;
+    box-shadow:0 1px 2px rgba(0,0,0,.04);
+  }
+  .card h2{margin-top:0;font-size:1.15rem;color:var(--teal-dark);}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media(max-width:640px){.grid{grid-template-columns:1fr;}}
+  label{display:block;font-size:.82rem;font-weight:600;margin-bottom:5px;color:var(--muted);}
+  input,select,textarea{
+    width:100%;
+    padding:10px 12px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    font-size:.92rem;
+    font-family:inherit;
+    background:#fbfaf6;
+  }
+  textarea{resize:vertical;min-height:90px;}
+  .field{margin-bottom:14px;}
+  .full{grid-column:1/-1;}
+  .btn{
+    background:var(--teal);
+    color:#fff;
+    border:none;
+    padding:11px 22px;
+    border-radius:8px;
+    font-size:.92rem;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .btn:hover{background:var(--teal-dark);}
+  .btn.secondary{background:transparent;color:var(--teal);border:1px solid var(--teal);}
+  .msg{margin-top:12px;padding:10px 14px;border-radius:8px;font-size:.85rem;display:none;}
+  .msg.ok{display:block;background:#e4f2ec;color:var(--teal-dark);border:1px solid #b7dbcc;}
+
+  .filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;}
+  .filters select{width:auto;min-width:160px;}
+
+  table{width:100%;border-collapse:collapse;font-size:.86rem;}
+  th,td{padding:10px 8px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;}
+  th{color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.04em;}
+  .badge{
+    display:inline-block;padding:3px 10px;border-radius:999px;font-size:.72rem;font-weight:700;
+  }
+  .badge.open{background:#fbe6df;color:var(--red);}
+  .badge.progress{background:#fdf1dc;color:#8a5b13;}
+  .badge.resolved{background:#e0efe6;color:var(--teal-dark);}
+  select.status-select{font-size:.78rem;padding:5px 8px;}
+
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+  @media(max-width:640px){.stats{grid-template-columns:1fr 1fr;}}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px;text-align:center;}
+  .stat .num{font-size:1.7rem;font-weight:800;color:var(--teal-dark);}
+  .stat .lbl{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.03em;}
+
+  .empty{padding:30px;text-align:center;color:var(--muted);font-size:.9rem;}
+  footer{text-align:center;padding:20px;color:var(--muted);font-size:.78rem;}
+  .id-tag{font-family:monospace;font-size:.75rem;color:var(--muted);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="mark">IRO</div>
+    <div>
+      <h1>Issues Reporting Outlet</h1>
+      <p>A shared channel for AAUA students and Akungba, Iwaro, Etioro &amp; Ayegunle indigenes</p>
+    </div>
+  </div>
+  <nav>
+    <button data-view="report" class="active">Report an Issue</button>
+    <button data-view="track">Track Reports</button>
+    <button data-view="admin">Desk Officer</button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- REPORT VIEW -->
+  <section id="view-report" class="view active">
+    <div class="card">
+      <h2>Submit a new issue report</h2>
+      <form id="reportForm">
+        <div class="grid">
+          <div class="field">
+            <label for="fullName">Full name</label>
+            <input id="fullName" required placeholder="e.g. Ada Obiora">
+          </div>
+          <div class="field">
+            <label for="role">You are reporting as</label>
+            <select id="role" required>
+              <option value="">Select...</option>
+              <option>Student</option>
+              <option>Indigene</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="community">Community involved</label>
+            <select id="community" required>
+              <option value="">Select...</option>
+              <option>Akungba</option>
+              <option>Iwaro</option>
+              <option>Etioro</option>
+              <option>Ayegunle</option>
+              <option>AAUA Campus</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="category">Issue category</label>
+            <select id="category" required>
+              <option value="">Select...</option>
+              <option>Security</option>
+              <option>Land / Boundary Dispute</option>
+              <option>Infrastructure (roads, light, water)</option>
+              <option>Health</option>
+              <option>Harassment / Victimization</option>
+              <option>Noise / Environmental Nuisance</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="contact">Phone or email (optional)</label>
+            <input id="contact" placeholder="For follow-up only">
+          </div>
+          <div class="field">
+            <label for="location">Specific location</label>
+            <input id="location" placeholder="e.g. behind Faculty of Science / Iwaro market road">
+          </div>
+          <div class="field full">
+            <label for="description">Describe the issue</label>
+            <textarea id="description" required placeholder="What happened, when, and who was involved?"></textarea>
+          </div>
+        </div>
+        <button type="submit" class="btn">Submit report</button>
+        <div class="msg ok" id="successMsg">✓ Report submitted. Your reference ID is <strong id="newRefId"></strong> — save it to track your report.</div>
+      </form>
+    </div>
+  </section>
+
+  <!-- TRACK VIEW -->
+  <section id="view-track" class="view">
+    <div class="card">
+      <h2>Track a report</h2>
+      <div class="filters">
+        <input id="trackId" placeholder="Enter reference ID (e.g. IRO-0001)" style="max-width:260px;">
+        <button class="btn secondary" id="trackBtn">Look up</button>
+      </div>
+      <div id="trackResult"></div>
+    </div>
+  </section>
+
+  <!-- ADMIN VIEW -->
+  <section id="view-admin" class="view">
+    <div class="stats" id="statsRow"></div>
+    <div class="card">
+      <h2>All reports</h2>
+      <div class="filters">
+        <select id="filterStatus">
+          <option value="">All statuses</option>
+          <option>Open</option>
+          <option>In Progress</option>
+          <option>Resolved</option>
+        </select>
+        <select id="filterCategory">
+          <option value="">All categories</option>
+        </select>
+        <button class="btn secondary" id="resetData">Reset demo data</button>
+      </div>
+      <div id="tableWrap"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>IRO — Issues Reporting Outlet · CSC426 mini web interface prototype · Data stored locally in this browser</footer>
+
+<script>
+(function(){
+  const STORAGE_KEY = "iro_reports_v1";
+
+  // ---- Model: IssueReport object ----
+  function IssueReport(data){
+    this.id = data.id;
+    this.fullName = data.fullName;
+    this.role = data.role;
+    this.community = data.community;
+    this.category = data.category;
+    this.contact = data.contact || "";
+    this.location = data.location || "";
+    this.description = data.description;
+    this.status = data.status || "Open";
+    this.dateSubmitted = data.dateSubmitted || new Date().toISOString();
+  }
+
+  function seedData(){
+    return [
+      new IssueReport({id:"IRO-0001", fullName:"Tunde A.", role:"Student", community:"Akungba", category:"Security", location:"Behind Male Hostel", description:"Reports of unlit path at night near hostel gate.", status:"In Progress"}),
+      new IssueReport({id:"IRO-0002", fullName:"Mama Bisi", role:"Indigene", community:"Iwaro", category:"Land / Boundary Dispute", location:"Iwaro-AAUA farm boundary", description:"Dispute over expansion of campus farmland into community land.", status:"Open"}),
+      new IssueReport({id:"IRO-0003", fullName:"Chiamaka O.", role:"Student", community:"Etioro", category:"Infrastructure (roads, light, water)", location:"Etioro-Akungba road", description:"Bad road making commute to lectures difficult during rains.", status:"Resolved"})
+    ];
+  }
+
+  function loadReports(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) { const seeded = seedData(); saveReports(seeded); return seeded; }
+      return JSON.parse(raw).map(r => new IssueReport(r));
+    }catch(e){
+      const seeded = seedData(); saveReports(seeded); return seeded;
+    }
+  }
+  function saveReports(reports){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(reports));
+  }
+  function nextId(reports){
+    const n = reports.length + 1;
+    return "IRO-" + String(n).padStart(4,"0");
+  }
+
+  let reports = loadReports();
+
+  // ---- Navigation ----
+  const navButtons = document.querySelectorAll("nav button");
+  navButtons.forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      navButtons.forEach(b=>b.classList.remove("active"));
+      btn.classList.add("active");
+      document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+      document.getElementById("view-"+btn.dataset.view).classList.add("active");
+      if(btn.dataset.view === "admin") renderAdmin();
+    });
+  });
+
+  // ---- Report form ----
+  document.getElementById("reportForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    const id = nextId(reports);
+    const report = new IssueReport({
+      id: id,
+      fullName: document.getElementById("fullName").value.trim(),
+      role: document.getElementById("role").value,
+      community: document.getElementById("community").value,
+      category: document.getElementById("category").value,
+      contact: document.getElementById("contact").value.trim(),
+      location: document.getElementById("location").value.trim(),
+      description: document.getElementById("description").value.trim()
+    });
+    reports.push(report);
+    saveReports(reports);
+    document.getElementById("newRefId").textContent = id;
+    document.getElementById("successMsg").style.display = "block";
+    this.reset();
+  });
+
+  // ---- Track view ----
+  document.getElementById("trackBtn").addEventListener("click", ()=>{
+    const val = document.getElementById("trackId").value.trim().toUpperCase();
+    const result = document.getElementById("trackResult");
+    const found = reports.find(r=>r.id.toUpperCase() === val);
+    if(!found){
+      result.innerHTML = '<div class="empty">No report found with that reference ID.</div>';
+      return;
+    }
+    result.innerHTML = `
+      <table>
+        <tr><th>Reference</th><td class="id-tag">${found.id}</td></tr>
+        <tr><th>Status</th><td>${statusBadge(found.status)}</td></tr>
+        <tr><th>Category</th><td>${found.category}</td></tr>
+        <tr><th>Community</th><td>${found.community}</td></tr>
+        <tr><th>Location</th><td>${found.location||"—"}</td></tr>
+        <tr><th>Description</th><td>${escapeHtml(found.description)}</td></tr>
+        <tr><th>Submitted</th><td>${new Date(found.dateSubmitted).toLocaleString()}</td></tr>
+      </table>`;
+  });
+
+  // ---- Admin view ----
+  function statusBadge(status){
+    const cls = status === "Open" ? "open" : status === "In Progress" ? "progress" : "resolved";
+    return `<span class="badge ${cls}">${status}</span>`;
+  }
+  function escapeHtml(s){
+    const d = document.createElement("div"); d.textContent = s; return d.innerHTML;
+  }
+
+  function populateCategoryFilter(){
+    const sel = document.getElementById("filterCategory");
+    const cats = [...new Set(reports.map(r=>r.category))];
+    sel.innerHTML = '<option value="">All categories</option>' + cats.map(c=>`<option>${c}</option>`).join("");
+  }
+
+  function renderAdmin(){
+    populateCategoryFilter();
+    const statusFilter = document.getElementById("filterStatus").value;
+    const catFilter = document.getElementById("filterCategory").value;
+
+    // Stats
+    const total = reports.length;
+    const open = reports.filter(r=>r.status==="Open").length;
+    const progress = reports.filter(r=>r.status==="In Progress").length;
+    const resolved = reports.filter(r=>r.status==="Resolved").length;
+    document.getElementById("statsRow").innerHTML = `
+      <div class="stat"><div class="num">${total}</div><div class="lbl">Total Reports</div></div>
+      <div class="stat"><div class="num">${open}</div><div class="lbl">Open</div></div>
+      <div class="stat"><div class="num">${progress}</div><div class="lbl">In Progress</div></div>
+      <div class="stat"><div class="num">${resolved}</div><div class="lbl">Resolved</div></div>`;
+
+    let list = reports.slice().reverse();
+    if(statusFilter) list = list.filter(r=>r.status===statusFilter);
+    if(catFilter) list = list.filter(r=>r.category===catFilter);
+
+    const wrap = document.getElementById("tableWrap");
+    if(list.length === 0){
+      wrap.innerHTML = '<div class="empty">No reports match this filter.</div>';
+      return;
+    }
+    wrap.innerHTML = `
+      <table>
+        <thead><tr>
+          <th>Ref</th><th>Reporter</th><th>Community</th><th>Category</th><th>Description</th><th>Status</th>
+        </tr></thead>
+        <tbody>
+          ${list.map(r=>`
+            <tr>
+              <td class="id-tag">${r.id}</td>
+              <td>${escapeHtml(r.fullName)}<br><small style="color:var(--muted)">${r.role}</small></td>
+              <td>${r.community}</td>
+              <td>${r.category}</td>
+              <td style="max-width:220px;">${escapeHtml(r.description)}</td>
+              <td>
+                <select class="status-select" data-id="${r.id}">
+                  <option ${r.status==="Open"?"selected":""}>Open</option>
+                  <option ${r.status==="In Progress"?"selected":""}>In Progress</option>
+                  <option ${r.status==="Resolved"?"selected":""}>Resolved</option>
+                </select>
+              </td>
+            </tr>`).join("")}
+        </tbody>
+      </table>`;
+
+    wrap.querySelectorAll(".status-select").forEach(sel=>{
+      sel.addEventListener("change", (e)=>{
+        const id = e.target.dataset.id;
+        const r = reports.find(x=>x.id===id);
+        r.status = e.target.value;
+        saveReports(reports);
+        renderAdmin();
+      });
+    });
+  }
+
+  document.getElementById("filterStatus").addEventListener("change", renderAdmin);
+  document.getElementById("filterCategory").addEventListener("change", renderAdmin);
+  document.getElementById("resetData").addEventListener("click", ()=>{
+    localStorage.removeItem(STORAGE_KEY);
+    reports = loadReports();
+    renderAdmin();
+  });
+
+})();
+</script>
+</body>
+</html>
